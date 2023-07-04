@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ciao Darwin - Delfino</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('ciaoDarwinSfondo.jpg');
+            background-size: cover;
+        }
+
+        .number-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .label {
+            margin: 0 15px;
+        }
+
+        .label {
+            background-color: blue;
+            color: white;
+            padding: 5px;
+            border: 2px solid white;
+            margin-bottom: 30px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .label-text {
+            font-size: 20px;
+        }
+
+        .highlight {
+            background-color: white;
+            color: blue;
+            border-color: blue;
+        }
+
+        .button {
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            background-image: url('earth_still.png');
+            background-size: cover;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .team-label {
+            width: 340px;
+            height: 80px;
+            position: absolute;
+            top: 820px;
+            transform: translateY(-50%);
+            padding: 10px;
+            color: white;
+            font-size: 36px;
+            background-color: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .team-label-left {
+            left: 300px;
+        }
+
+        .team-label-right {
+            right: 300px;
+        }
+
+        .number-label {
+            position: absolute;
+            top: 550px;
+            transform: translateY(-100%);
+            padding: 10px;
+            color: white;
+            font-size: 120px;
+            background-color: blue;
+            padding: 5px;
+            border: 2px solid white;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .number-label-left {
+            left: 200px;
+        }
+
+        .number-label-right {
+            right: 200px;
+        }
+    </style>
+</head>
+
+<body onload="initialize()">
+    <div class="container">
+        <div class="team-label team-label-left"></div>
+        <div class="team-label team-label-right"></div>
+        <div class="number-label number-label-left"></div>
+        <div class="number-label number-label-right"></div>
+        <div class="button" onclick="animateEarth()"></div>
+        <div class="number-container"></div>
+    </div>
+
+    <script>
+        var numLabels = '';
+
+        function initialize() {
+            numLabels = parseInt(prompt("Enter the number of labels:"));
+
+            // Validate the input
+            if (isNaN(numLabels) || numLabels <= 0) {
+                alert("Invalid input. Please enter a positive number.");
+                return;
+            }
+
+            createLabels(numLabels);
+            setTeamNames();
+        }
+
+        function createLabels(numLabels) {
+            var labelContainer = document.querySelector(".number-container");
+            labelContainer.innerHTML = ""; // Clear existing labels
+
+            for (var i = 1; i <= numLabels; i++) {
+                var label = document.createElement("label");
+                label.className = "label";
+                var labelText = document.createElement("span");
+                labelText.className = "label-text";
+                labelText.textContent = i;
+                label.appendChild(labelText);
+                labelContainer.appendChild(label);
+            }
+        }
+
+        function setTeamNames() {
+            var teamLeft = prompt("Enter the name of the left team:");
+            var teamRight = prompt("Enter the name of the right team:");
+
+            var teamLabelLeft = document.querySelector(".team-label-left");
+            var teamLabelRight = document.querySelector(".team-label-right");
+
+            teamLabelLeft.textContent = teamLeft;
+            teamLabelRight.textContent = teamRight;
+        }
+        var switchsquadra = "right";
+        function animateEarth() {
+
+            var button = document.querySelector(".button");
+            var labels = document.getElementsByClassName("label");
+            var numberLabelLeft = document.querySelector(".number-label-left");
+            var numberLabelRight = document.querySelector(".number-label-right");
+
+            // Remove the "highlight" class from all labels
+            for (var i = 0; i < labels.length; i++) {
+                labels[i].classList.remove("highlight");
+            }
+
+            // Reset valori label 
+            if (numberLabelLeft.textContent != "" && numberLabelRight.textContent != "" ) {
+                numberLabelLeft.textContent = "";
+                numberLabelRight.textContent = "";
+            }
+
+            // Stop the GIF animation if already started
+            button.style.backgroundImage = "url('earth_still.png')";
+
+            // Start the GIF animation
+            button.style.backgroundImage = "url('earth.gif')";
+
+            // Start random highlighting of numbers every 0.5 seconds
+            var interval = setInterval(function () {
+                for (var i = 0; i < labels.length; i++) {
+                    labels[i].classList.remove("highlight");
+                }
+
+                var randomRight = Math.floor(Math.random() * numLabels) + 1;
+                console.log(randomRight, ' ', labels[randomRight - 1].textContent);
+                labels[randomRight - 1].classList.add("highlight");
+
+                // Update the number labels with the random number
+                if (switchsquadra == "right") {
+                    numberLabelLeft.textContent = randomRight;
+                }else {
+                    numberLabelRight.textContent = randomRight;
+                }
+                // Play the sound
+                var audio = new Audio('beep.mp3'); // Assuming the audio file is named 'beep.mp3' and located in the same folder as the HTML file
+                audio.play();
+            }, 500);
+
+            // Stop the GIF animation and random highlighting after 5 seconds
+            setTimeout(function () {
+                button.style.backgroundImage = "url('earth_still.png')";
+                clearInterval(interval);
+                if (switchsquadra == "right") {
+                    switchsquadra = "left";
+                }else {
+                    switchsquadra = "right";
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>

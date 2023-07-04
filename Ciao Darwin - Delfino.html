@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://127.0.0.1:5500/Progetto4/CD2.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Ciao Darwin - Delfino</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('ciaoDarwinSfondo.jpg');
+            background-size: cover;
+        }
+
+        .number-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .label {
+            margin: 0 15px;
+        }
+
+        .label {
+            background-color: blue;
+            color: white;
+            padding: 5px;
+            border: 2px solid white;
+            margin-bottom: 30px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .label-text {
+            font-size: 20px;
+        }
+
+        .highlight {
+            background-color: white;
+            color: blue;
+            border-color: blue;
+        }
+
+        .button {
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            background-image: url('earth_still.png');
+            background-size: cover;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body onload="initialize()">
+    <div class="container">
+        <div class="button" onclick="animateEarth()" style="background-image: url(&quot;earth_still.png&quot;);"></div>
+        <div class="number-container"><label class="label"><span class="label-text">1</span></label><label class="label"><span class="label-text">2</span></label><label class="label"><span class="label-text">3</span></label><label class="label"><span class="label-text">4</span></label><label class="label"><span class="label-text">5</span></label><label class="label"><span class="label-text">6</span></label><label class="label"><span class="label-text">7</span></label><label class="label"><span class="label-text">8</span></label><label class="label"><span class="label-text">9</span></label><label class="label highlight"><span class="label-text">10</span></label></div>
+    </div>
+
+    <script>
+        var numLabels = '';
+        function initialize() {
+            numLabels = parseInt(prompt("Enter the number of labels:"));
+
+            // Validate the input
+            if (isNaN(numLabels) || numLabels <= 0) {
+                alert("Invalid input. Please enter a positive number.");
+                return;
+            }
+
+            createLabels(numLabels);
+        }
+        function createLabels(numLabels) {
+            var labelContainer = document.querySelector(".number-container");
+            labelContainer.innerHTML = ""; // Clear existing labels
+
+            for (var i = 1; i <= numLabels; i++) {
+                var label = document.createElement("label");
+                label.className = "label";
+                var labelText = document.createElement("span");
+                labelText.className = "label-text";
+                labelText.textContent = i;
+                label.appendChild(labelText);
+                labelContainer.appendChild(label);
+            }
+        }
+
+        function animateEarth() {
+
+
+            var ritardo = 0;
+            var button = document.querySelector(".button");
+            var labels = document.getElementsByClassName("label");
+            // Rimuove la classe "highlight" da tutti i label
+            for (var i = 0; i < labels.length; i++) {
+                labels[i].classList.remove("highlight");
+            }
+
+            // Ferma l'animazione della GIF se già iniziata
+            button.style.backgroundImage = "url('earth_still.png')";
+
+            // Avvia l'animazione della GIF
+            button.style.backgroundImage = "url('earth.gif')";
+/*
+            // Avvia la riproduzione del suono
+            var audio = new Audio('random.mp3'); //stessa cartella del file HTML
+            audio.play();
+*/
+            // Avvia l'illuminazione casuale dei numeri ogni 0.5 secondi
+            var interval = setInterval(function () {
+                for (var i = 0; i < labels.length; i++) {
+                    labels[i].classList.remove("highlight");
+                    // Avvia la riproduzione del suono
+                    var audio = new Audio('beep.mp3'); //stessa cartella del file HTML
+                    audio.play();
+
+
+                }
+
+                var randomRight = Math.floor(Math.random() * numLabels) + 1;
+                console.log(randomRight, ' ', labels[randomRight - 1].textContent);
+                labels[randomRight - 1].classList.add("highlight");
+            }, 200);
+
+            clearInterval(interval);
+
+            // Avvia l'illuminazione casuale dei numeri ogni 0.5 secondi
+            var interval2 = setInterval(function () {
+                for (var i = 0; i < labels.length; i++) {
+                    labels[i].classList.remove("highlight");
+                    // Avvia la riproduzione del suono
+                    var audio = new Audio('beep.mp3'); //stessa cartella del file HTML
+                    audio.play();
+
+
+                }
+
+                var randomRight = Math.floor(Math.random() * numLabels) + 1;
+                console.log(randomRight, ' ', labels[randomRight - 1].textContent);
+                labels[randomRight - 1].classList.add("highlight");
+            }, 500);
+
+            // Dopo 5 secondi, ferma l'animazione della GIF e l'illuminazione casuale dei numeri
+            setTimeout(function () {
+                button.style.backgroundImage = "url('earth_still.png')";
+                //clearInterval(interval);
+                clearInterval(interval2);
+            }, 5000);
+        }
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</body></html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ciao Darwin - Delfino</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('ciaoDarwinSfondo.jpg');
+            background-size: cover;
+        }
+
+        .number-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .label {
+            margin: 0 15px;
+        }
+
+        .label {
+            background-color: blue;
+            color: white;
+            padding: 5px;
+            border: 2px solid white;
+            margin-bottom: 30px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .label-text {
+            font-size: 20px;
+        }
+
+        .highlight {
+            background-color: white;
+            color: blue;
+            border-color: blue;
+        }
+
+        .button {
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            background-image: url('earth_still.png');
+            background-size: cover;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body onload="initialize()">
+    <div class="container">
+        <div class="button" onclick="animateEarth()"></div>
+        <div class="number-container"></div>
+    </div>
+
+    <script>
+        var numLabels='';
+        function initialize() {
+            numLabels = parseInt(prompt("Enter the number of labels:"));
+
+            // Validate the input
+            if (isNaN(numLabels) || numLabels <= 0) {
+                alert("Invalid input. Please enter a positive number.");
+                return;
+            }
+
+            createLabels(numLabels);
+        }
+        function createLabels(numLabels) {
+            var labelContainer = document.querySelector(".number-container");
+            labelContainer.innerHTML = ""; // Clear existing labels
+
+            for (var i = 1; i <= numLabels; i++) {
+                var label = document.createElement("label");
+                label.className = "label";
+                var labelText = document.createElement("span");
+                labelText.className = "label-text";
+                labelText.textContent = i;
+                label.appendChild(labelText);
+                labelContainer.appendChild(label);
+            }
+        }
+
+        function animateEarth() {
+
+
+            var ritardo = 0;
+            var button = document.querySelector(".button");
+            var labels = document.getElementsByClassName("label");
+            // Rimuove la classe "highlight" da tutti i label
+            for (var i = 0; i < labels.length; i++) {
+                labels[i].classList.remove("highlight");
+            }
+
+            // Ferma l'animazione della GIF se già iniziata
+            button.style.backgroundImage = "url('earth_still.png')";
+
+            // Avvia l'animazione della GIF
+            button.style.backgroundImage = "url('earth.gif')";
+
+            // Avvia la riproduzione del suono
+            var audio = new Audio('random.mp3'); //stessa cartella del file HTML
+            audio.play();
+
+            // Avvia l'illuminazione casuale dei numeri ogni 0.5 secondi
+            var interval = setInterval(function () {
+                for (var i = 0; i < labels.length; i++) {
+                    labels[i].classList.remove("highlight");
+
+                }
+
+                var randomRight = Math.floor(Math.random() * numLabels) + 1;
+                console.log(randomRight, ' ', labels[randomRight - 1].textContent);
+                labels[randomRight - 1].classList.add("highlight");
+            }, 500);
+
+            // Dopo 5 secondi, ferma l'animazione della GIF e l'illuminazione casuale dei numeri
+            setTimeout(function () {
+                button.style.backgroundImage = "url('earth_still.png')";
+                clearInterval(interval);
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>
